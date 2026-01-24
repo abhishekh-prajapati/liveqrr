@@ -1,0 +1,91 @@
+{
+  "veg": [
+    { "name": "पनीर बटर मसाला", "price": 220, "img": "panner_butter_masala.jpg", "veg": true },
+    { "name": "कढ़ाई पनीर", "price": 210, "img": "kadai_paneer.jpg", "veg": true },
+    { "name": "शाही पनीर", "price": 230, "img": "shahi_paneer.jpg", "veg": true },
+    { "name": "वेज कोल्हापुरी", "price": 200, "img": "veg_kolhapuri.jpg", "veg": true },
+    { "name": "मिक्स वेज करी", "price": 180, "img": "Mix_Veg_Curry.jpg", "veg": true },
+    { "name": "दाल तड़का", "price": 160, "img": "dal_tadka.jpg", "veg": true },
+    { "name": "दाल फ्राय", "price": 150, "img": "dal_fry.jpg", "veg": true },
+    { "name": "वेज हांडी", "price": 190, "img": "veg_handi.jpg", "veg": true },
+    { "name": "आलू गोभी", "price": 140, "img": "aloo_gobi.jpg", "veg": true },
+    { "name": "जीरा आलू", "price": 130, "img": "jeera_aloo.jpg", "veg": true },
+    { "name": "भिंडी मसाला", "price": 150, "img": "bhindi_masala.jpg", "veg": true },
+    { "name": "छोले मसाला", "price": 160, "img": "chole_masala.jpg", "veg": true },
+    { "name": "राजमा मसाला", "price": 170, "img": "rajma.jpg", "veg": true },
+    { "name": "मलाई कोफ्ता", "price": 240, "img": "malai_kofta.jpg", "veg": true },
+    { "name": "वेज थाली", "price": 260, "img": "veg_thali.jpg", "veg": true }
+  ],
+
+  "nonveg": [
+    { "name": "चिकन बटर मसाला", "price": 280, "img": "Chicken_Butter_Masala.jpg", "veg": false },
+    { "name": "चिकन टिक्का मसाला", "price": 270, "img": "Chicken_Tikka_Masala.webp", "veg": false },
+    { "name": "चिकन कोल्हापुरी", "price": 260, "img": "Chicken_Kolhapuri.jpg", "veg": false },
+    { "name": "चिकन हांडी", "price": 290, "img": "Chicken_Handi.webp", "veg": false },
+    { "name": "चिकन करी", "price": 240, "img": "Chicken_Curry.webp", "veg": false },
+    { "name": "चिकन बिरयानी", "price": 300, "img": "Chicken_Biryani.webp", "veg": false },
+    { "name": "मटन बिरयानी", "price": 380, "img": "Mutton_Biryani.webp", "veg": false },
+    { "name": "मटन करी", "price": 360, "img": "Mutton_curry.webp", "veg": false },
+    { "name": "अंडा करी", "price": 190, "img": "Egg_Curry.webp", "veg": false },
+    { "name": "अंडा मसाला", "price": 180, "img": "Egg_Masala.webp", "veg": false },
+    { "name": "फिश करी", "price": 320, "img": "Fish_Curry.jpg", "veg": false },
+    { "name": "फिश फ्राय", "price": 340, "img": "Fish_Fry.webp", "veg": false },
+    { "name": "चिकन लॉलीपॉप", "price": 260, "img": "Chicken_Lollipop.webp", "veg": false },
+    { "name": "तंदूरी चिकन", "price": 350, "img": "Tandoori_Chicken.webp", "veg": false },
+    { "name": "चिकन थाली", "price": 330, "img": "Chicken_Thali.webp", "veg": false }
+  ],
+
+  "chinese": [
+    { "name": "वेज हक्का नूडल्स", "price": 160, "img": "Veg-Hakka-Noodles.jpg" },
+    { "name": "वेज फ्राइड राइस", "price": 150, "img": "Veg-Fried-Rice.webp" },
+    { "name": "वेज मंचूरियन", "price": 170, "img": "Veg-Manchurian.jpg" },
+    { "name": "पनीर चिली", "price": 200, "img": "Panner-Chilli.webp " },
+    { "name": "वेज स्प्रिंग रोल", "price": 140, "img": "Veg-Spring-Roll.webp" },
+    { "name": "चिकन फ्राइड राइस", "price": 190, "img": "Chicken-Fried-Rice.jpg" },
+    { "name": "चिकन नूडल्स", "price": 200, "img": "Chicken-Noodles.jpg" },
+    { "name": "चिकन मंचूरियन", "price": 210, "img": "Chicken-Manchurian.jpg" },
+    { "name": "चिकन चिली", "price": 230, "img": "Chicken-Chilli.jpg" },
+    { "name": "शेजवान नूडल्स", "price": 180, "img": "Schezwan-Noodles.webp" },
+    { "name": "शेजवान राइस", "price": 170, "img": "Schezwan-Rice.jpg" },
+    { "name": "ट्रिपल फ्राइड राइस", "price": 220, "img": "Triple-Fried-Rice.jpg" },
+    { "name": "हनी चिली पोटैटो", "price": 160, "img": "Honey-Chilli-Potato.jpg" },
+    { "name": "अमेरिकन चॉप्सुए", "price": 210, "img": "American-Chopsuey.jpg" },
+    { "name": "चाइनीज भेल", "price": 130, "img": "Chinese-Bhel.jpg" }
+  ],
+
+  "south": [
+    { "name": "प्लेन डोसा", "price": 120, "img": "" },
+    { "name": "मसाला डोसा", "price": 150, "img": "" },
+    { "name": "मैसूर डोसा", "price": 170, "img": "" },
+    { "name": "इडली सांभर", "price": 100, "img": "" },
+    { "name": "मेदु वडा", "price": 110, "img": "" },
+    { "name": "उत्तपम", "price": 140, "img": "" },
+    { "name": "रवा डोसा", "price": 160, "img": "" },
+    { "name": "सेट डोसा", "price": 150, "img": "" },
+    { "name": "सांभर राइस", "price": 140, "img": "" },
+    { "name": "दही चावल", "price": 120, "img": "" },
+    { "name": "नींबू चावल", "price": 130, "img": "" },
+    { "name": "रसम चावल", "price": 120, "img": "" },
+    { "name": "साउथ इंडियन थाली", "price": 260, "img": "" },
+    { "name": "पोंगल", "price": 140, "img": "" },
+    { "name": "फिल्टर कॉफी", "price": 60, "img": "" }
+  ],
+
+  "snacks": [
+    { "name": "समोसा", "price": 30, "img": "" },
+    { "name": "कचौरी", "price": 35, "img": "" },
+    { "name": "वड़ा पाव", "price": 25, "img": "" },
+    { "name": "पाव भाजी", "price": 150, "img": "" },
+    { "name": "मिसल पाव", "price": 140, "img": "" },
+    { "name": "भेल पूरी", "price": 80, "img": "" },
+    { "name": "सेव पूरी", "price": 90, "img": "" },
+    { "name": "दही पूरी", "price": 100, "img": "" },
+    { "name": "चीज़ सैंडविच", "price": 120, "img": "" },
+    { "name": "ग्रिल्ड सैंडविच", "price": 130, "img": "" },
+    { "name": "फ्रेंच फ्राइज", "price": 110, "img": "" },
+    { "name": "चीज़ फ्राइज", "price": 140, "img": "" },
+    { "name": "वेज पफ", "price": 35, "img": "" },
+    { "name": "चाय", "price": 20, "img": "" },
+    { "name": "कोल्ड कॉफी", "price": 90, "img": "" }
+  ]
+}

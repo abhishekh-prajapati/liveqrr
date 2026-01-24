@@ -1,0 +1,91 @@
+{
+  "veg": [
+    { "name": "Paneer Butter Masala", "price": 220, "img": "panner_butter_masala.jpg", "veg": true },
+    { "name": "Kadai Paneer", "price": 210, "img": "kadai_paneer.jpg", "veg": true },
+    { "name": "Shahi Paneer", "price": 230, "img": "shahi_paneer.jpg", "veg": true },
+    { "name": "Veg Kolhapuri", "price": 200, "img": "veg_kolhapuri.jpg", "veg": true },
+    { "name": "Mix Veg Curry", "price": 180, "img": "Mix_Veg_Curry.jpg", "veg": true },
+    { "name": "Dal Tadka", "price": 160, "img": "dal_tadka.jpg", "veg": true },
+    { "name": "Dal Fry", "price": 150, "img": "dal_fry.jpg", "veg": true },
+    { "name": "Veg Handi", "price": 190, "img": "veg_handi.jpg", "veg": true },
+    { "name": "Aloo Gobi", "price": 140, "img": "aloo_gobi.jpg", "veg": true },
+    { "name": "Jeera Aloo", "price": 130, "img": "jeera_aloo.jpg", "veg": true },
+    { "name": "Bhindi Masala", "price": 150, "img": "bhindi_masala.jpg", "veg": true },
+    { "name": "Chole Masala", "price": 160, "img": "chole_masala.jpg", "veg": true },
+    { "name": "Rajma Masala", "price": 170, "img": "rajma.jpg", "veg": true },
+    { "name": "Malai Kofta", "price": 240, "img": "malai_kofta.jpg", "veg": true },
+    { "name": "Veg Thali", "price": 260, "img": "veg_thali.jpg", "veg": true }
+  ],
+
+  "nonveg": [
+    { "name": "Chicken Butter Masala", "price": 280, "img": "Chicken_Butter_Masala.jpg", "veg": false },
+    { "name": "Chicken Tikka Masala", "price": 270, "img": "Chicken_Tikka_Masala.webp", "veg": false },
+    { "name": "Chicken Kolhapuri", "price": 260, "img": "Chicken_Kolhapuri.jpg", "veg": false },
+    { "name": "Chicken Handi", "price": 290, "img": "Chicken_Handi.webp", "veg": false },
+    { "name": "Chicken Curry", "price": 240, "img": "Chicken_Curry.webp", "veg": false },
+    { "name": "Chicken Biryani", "price": 300, "img": "Chicken_Biryani.webp", "veg": false },
+    { "name": "Mutton Biryani", "price": 380, "img": "Mutton_Biryani.webp", "veg": false },
+    { "name": "Mutton Curry", "price": 360, "img": "Mutton_curry.webp", "veg": false },
+    { "name": "Egg Curry", "price": 190, "img": "Egg_Curry.webp", "veg": false },
+    { "name": "Egg Masala", "price": 180, "img": "Egg_Masala.webp", "veg": false },
+    { "name": "Fish Curry", "price": 320, "img": "Fish_Curry.jpg", "veg": false },
+    { "name": "Fish Fry", "price": 340, "img": "Fish_Fry.webp", "veg": false },
+    { "name": "Chicken Lollipop", "price": 260, "img": "Chicken_Lollipop.webp", "veg": false },
+    { "name": "Tandoori Chicken", "price": 350, "img": "Tandoori_Chicken.webp", "veg": false },
+    { "name": "Chicken Thali", "price": 330, "img": "Chicken_Thali.webp", "veg": false }
+  ],
+
+  "chinese": [
+    { "name": "Veg Hakka Noodles", "price": 160, "img": "Veg-Hakka-Noodles.jpg" },
+    { "name": "Veg Fried Rice", "price": 150, "img": "Veg-Fried-Rice.webp" },
+    { "name": "Veg Manchurian", "price": 170, "img": "Veg-Manchurian.jpg" },
+    { "name": "Paneer Chilli", "price": 200, "img": "Panner-Chilli.webp " },
+    { "name": "Veg Spring Roll", "price": 140, "img": "Veg-Spring-Roll.webp" },
+    { "name": "Chicken Fried Rice", "price": 190, "img": "Chicken-Fried-Rice.jpg" },
+    { "name": "Chicken Noodles", "price": 200, "img": "Chicken-Noodles.jpg" },
+    { "name": "Chicken Manchurian", "price": 210, "img": "Chicken-Manchurian.jpg" },
+    { "name": "Chicken Chilli", "price": 230, "img": "Chicken-Chilli.jpg" },
+    { "name": "Schezwan Noodles", "price": 180, "img": "Schezwan-Noodles.webp" },
+    { "name": "Schezwan Rice", "price": 170, "img": "Schezwan-Rice.jpg" },
+    { "name": "Triple Fried Rice", "price": 220, "img": "Triple-Fried-Rice.jpg" },
+    { "name": "Honey Chilli Potato", "price": 160, "img": "Honey-Chilli-Potato.jpg" },
+    { "name": "American Chopsuey", "price": 210, "img": "American-Chopsuey.jpg" },
+    { "name": "Chinese Bhel", "price": 130, "img": "Chinese-Bhel.jpg" }
+  ],
+
+  "south": [
+    { "name": "Plain Dosa", "price": 120, "img": "" },
+    { "name": "Masala Dosa", "price": 150, "img": "" },
+    { "name": "Mysore Dosa", "price": 170, "img": "" },
+    { "name": "Idli Sambar", "price": 100, "img": "" },
+    { "name": "Medu Vada", "price": 110, "img": "" },
+    { "name": "Uttapam", "price": 140, "img": "" },
+    { "name": "Rava Dosa", "price": 160, "img": "" },
+    { "name": "Set Dosa", "price": 150, "img": "" },
+    { "name": "Sambar Rice", "price": 140, "img": "" },
+    { "name": "Curd Rice", "price": 120, "img": "" },
+    { "name": "Lemon Rice", "price": 130, "img": "" },
+    { "name": "Rasam Rice", "price": 120, "img": "" },
+    { "name": "South Indian Thali", "price": 260, "img": "" },
+    { "name": "Pongal", "price": 140, "img": "" },
+    { "name": "Filter Coffee", "price": 60, "img": "" }
+  ],
+
+  "snacks": [
+    { "name": "Samosa", "price": 30, "img": "" },
+    { "name": "Kachori", "price": 35, "img": "" },
+    { "name": "Vada Pav", "price": 25, "img": "" },
+    { "name": "Pav Bhaji", "price": 150, "img": "" },
+    { "name": "Misal Pav", "price": 140, "img": "" },
+    { "name": "Bhel Puri", "price": 80, "img": "" },
+    { "name": "Sev Puri", "price": 90, "img": "" },
+    { "name": "Dahi Puri", "price": 100, "img": "" },
+    { "name": "Cheese Sandwich", "price": 120, "img": "" },
+    { "name": "Grilled Sandwich", "price": 130, "img": "" },
+    { "name": "French Fries", "price": 110, "img": "" },
+    { "name": "Cheese Fries", "price": 140, "img": "" },
+    { "name": "Veg Puff", "price": 35, "img": "" },
+    { "name": "Tea", "price": 20, "img": "" },
+    { "name": "Cold Coffee", "price": 90, "img": "" }
+  ]
+}

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Demo Payment | QRIFY</title>
+
+<style>
+:root{
+  --bg:#F7F7F5;
+  --surface:#FFFFFF;
+  --primary:#1F2937;
+  --secondary:#D97706;
+  --accent:#F59E0B;
+  --border:#E5E7EB;
+  --shadow:0 12px 30px rgba(0,0,0,.15);
+}
+
+*{ box-sizing:border-box; }
+
+body{
+  margin:0;
+  font-family:Inter, system-ui, sans-serif;
+  background:var(--bg);
+  color:var(--primary);
+}
+
+.container{
+  max-width:520px;
+  margin:auto;
+  padding:20px;
+}
+
+.card{
+  background:var(--surface);
+  border-radius:22px;
+  padding:20px;
+  box-shadow:var(--shadow);
+  margin-bottom:16px;
+}
+
+h2{
+  margin:0 0 14px;
+  color:var(--secondary);
+}
+
+/* ITEMS */
+.item{
+  display:flex;
+  justify-content:space-between;
+  font-size:14px;
+  margin-bottom:8px;
+}
+
+.total{
+  display:flex;
+  justify-content:space-between;
+  font-weight:700;
+  font-size:16px;
+  margin-top:12px;
+}
+
+/* PAYMENT OPTIONS */
+.pay-option{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:14px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  margin-bottom:10px;
+  cursor:pointer;
+}
+
+.pay-option.active{
+  background:#FEF3C7;
+  border-color:var(--accent);
+}
+
+.pay-option input{
+  accent-color:var(--accent);
+}
+
+/* BUTTONS */
+.pay-btn{
+  width:100%;
+  padding:16px;
+  border:none;
+  border-radius:999px;
+  font-size:16px;
+  font-weight:600;
+  cursor:pointer;
+  margin-bottom:10px;
+}
+
+.pay-now{
+  background:linear-gradient(135deg,#F59E0B,#D97706);
+  color:white;
+}
+
+.cash-btn{
+  background:#fff;
+  color:var(--secondary);
+  border:2px dashed var(--secondary);
+}
+
+/* LOADER */
+.loader{
+  text-align:center;
+  font-size:15px;
+  padding:20px;
+  display:none;
+  color:var(--muted);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- SUMMARY -->
+  <div class="card">
+    <h2>Payment Summary</h2>
+    <div id="items"></div>
+    <div class="total">
+      <span>Total</span>
+      <span id="totalAmount">₹0</span>
+    </div>
+  </div>
+
+  <!-- ONLINE PAYMENT OPTIONS -->
+  <div class="card">
+    <div class="pay-option active" onclick="selectPay(this)">
+      <input type="radio" checked>
+      <span>UPI</span>
+    </div>
+
+    <div class="pay-option" onclick="selectPay(this)">
+      <input type="radio">
+      <span>Debit / Credit Card</span>
+    </div>
+  </div>
+
+  <!-- ACTION BUTTONS -->
+  <button class="pay-btn pay-now" onclick="startDemoPayment()">Pay Now</button>
+  <button class="pay-btn cash-btn" onclick="cashPayment()">Cash Payment</button>
+
+  <div class="loader" id="loader">Processing payment…</div>
+
+</div>
+
+<script>
+const cart = JSON.parse(sessionStorage.getItem("qrify_cart"));
+const itemsBox = document.getElementById("items");
+const totalBox = document.getElementById("totalAmount");
+const loader = document.getElementById("loader");
+
+if(!cart){
+  window.location.href = "home.html";
+}
+
+let total = 0;
+
+/* Render items */
+Object.keys(cart).forEach(name=>{
+  const { qty, price } = cart[name];
+  const amt = qty * price;
+  total += amt;
+
+  itemsBox.innerHTML += `
+    <div class="item">
+      <span>${name} × ${qty}</span>
+      <span>₹${amt}</span>
+    </div>
+  `;
+});
+
+totalBox.textContent = "₹" + total;
+
+/* Payment option UI */
+function selectPay(el){
+  document.querySelectorAll(".pay-option").forEach(o=>{
+    o.classList.remove("active");
+    o.querySelector("input").checked = false;
+  });
+  el.classList.add("active");
+  el.querySelector("input").checked = true;
+}
+
+/* DEMO ONLINE PAYMENT */
+function startDemoPayment(){
+  loader.style.display = "block";
+
+  setTimeout(() => {
+    loader.style.display = "none";
+
+    // 80% success rate
+    if(Math.random() < 0.8){
+      alert("Online Payment Successful (Demo)");
+      finishOrder();
+    }else{
+      alert("Online Payment Failed (Demo). Try again.");
+    }
+  }, 2000);
+}
+
+/* CASH PAYMENT */
+function cashPayment(){
+  const confirmCash = confirm("Confirm cash payment at counter?");
+  if(confirmCash){
+    alert("Order placed. Please pay cash at counter.");
+    finishOrder();
+  }
+}
+
+/* COMMON FINISH */
+function finishOrder(){
+  sessionStorage.removeItem("qrify_cart");
+  window.location.href = "home.html";
+}
+</script>
+
+</body>
+</html>
