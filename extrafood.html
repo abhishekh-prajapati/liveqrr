@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Status | QRIFY</title>
+
+    <style>
+        /* Reuse core variables from home.html */
+        :root {
+            --bg: #f7f7f5;
+            --surface: #ffffff;
+            --primary: #1f2937;
+            --secondary: #d97706;
+            --accent: #f59e0b;
+            --muted: #6b7280;
+            --border: #e5e7eb;
+            --shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            --success: #10b981;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--primary);
+            padding-bottom: 140px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        /* ===== STATUS HEADER ===== */
+        .status-header {
+            background: #ecfdf5;
+            padding: 24px 18px;
+            text-align: center;
+            border-bottom: 1px solid #d1fae5;
+        }
+
+        .status-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--success);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin: 0 auto 12px;
+        }
+
+        .status-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: #065f46;
+            margin: 0 0 6px;
+        }
+
+        .status-subtitle {
+            font-size: 14px;
+            color: #047857;
+        }
+
+        /* ===== ACCORDION SUMMARY ===== */
+        .order-summary-box {
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .summary-toggle {
+            width: 100%;
+            padding: 16px 18px;
+            background: white;
+            border: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .summary-toggle:after {
+            content: '▼';
+            font-size: 12px;
+            transition: transform 0.3s;
+        }
+
+        .summary-toggle.active:after {
+            transform: rotate(180deg);
+        }
+
+        .summary-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background: #fafafa;
+        }
+
+        .summary-inner {
+            padding: 16px 18px;
+            border-top: 1px solid var(--border);
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 8px;
+            color: var(--muted);
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            font-size: 16px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed var(--border);
+            color: var(--primary);
+        }
+
+        .receipt-btn {
+            display: block;
+            width: 100%;
+            margin: 16px 0 0;
+            padding: 10px;
+            background: white;
+            border: 1px solid var(--secondary);
+            color: var(--secondary);
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        /* ===== UPSELL SECTION ===== */
+        .upsell-header {
+            padding: 30px 18px 10px;
+        }
+
+        .upsell-header h3 {
+            margin: 0;
+            font-size: 18px;
+            color: var(--primary);
+        }
+
+        .upsell-header p {
+            margin: 4px 0 0;
+            font-size: 13px;
+            color: var(--muted);
+        }
+
+        /* COPY STYLES FROM HOME.HTML FOR MENU */
+        /* Reuse Navigation & Menu Styles by including app css/logic */
+        /* We will inject the standard menu styles here for consistency */
+
+        /* ===== CATEGORIES WRAPPER (Mini version) ===== */
+        .categories-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 30;
+            background: rgba(247, 247, 245, 0.95);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid var(--border);
+            border-top: 1px solid var(--border);
+        }
+
+        .categories {
+            display: flex;
+            gap: 10px;
+            padding: 14px 18px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .categories::-webkit-scrollbar {
+            display: none;
+        }
+
+        .categories span {
+            flex-shrink: 0;
+            padding: 8px 18px;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 500;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .categories span.active {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border-color: transparent;
+            box-shadow: 0 4px 14px rgba(217, 119, 6, 0.35);
+        }
+
+        /* REUSE MENU CSS */
+        .menu-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            padding-bottom: 40px;
+        }
+
+        .menu-item-z {
+            display: flex;
+            justify-content: space-between;
+            padding: 16px;
+            background: white;
+            gap: 12px;
+            border-bottom: 1px dashed #e5e7eb;
+            position: relative;
+        }
+
+        .menu-grid .menu-item-z:last-child {
+            border-bottom: none;
+        }
+
+        .menu-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            min-width: 0;
+        }
+
+        .menu-meta {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .diet-icon {
+            width: 16px;
+            height: 16px;
+            border: 2px solid;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .diet-icon.veg {
+            border-color: #24963f;
+        }
+
+        .diet-icon.veg::after {
+            content: "";
+            width: 8px;
+            height: 8px;
+            background: #24963f;
+            border-radius: 50%;
+        }
+
+        .diet-icon.nonveg {
+            border-color: #d97706;
+        }
+
+        .diet-icon.nonveg::after {
+            content: "▲";
+            font-size: 10px;
+            color: #d97706;
+            line-height: 0;
+            position: relative;
+            top: -1px;
+        }
+
+        .tag-bestseller {
+            font-size: 10px;
+            font-weight: 700;
+            color: #7b4f0b;
+            background: linear-gradient(90deg, #fef3c7, #fffbeb);
+            padding: 1px 5px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .menu-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+            margin: 0 0 2px;
+            line-height: 1.25;
+            text-transform: capitalize;
+        }
+
+        .menu-price {
+            font-size: 15px;
+            color: #1f2937;
+            margin-top: 2px;
+            margin-bottom: 4px;
+            font-weight: 500;
+        }
+
+        .menu-rating {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .stars {
+            background: #24963f;
+            color: white;
+            padding: 0px 5px;
+            border-radius: 4px;
+            font-weight: 700;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            height: 18px;
+        }
+
+        .star-symbol {
+            font-size: 9px;
+        }
+
+        .votes {
+            font-size: 12px;
+            color: #888;
+            font-weight: 500;
+        }
+
+        .menu-desc {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-top: 4px;
+        }
+
+        .menu-right {
+            width: 130px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+
+        .img-wrapper {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .img-wrapper img {
+            width: 100%;
+            height: 100%;
+            border-radius: 16px;
+            object-fit: cover;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        /* ADD BTN & QTY */
+        .add-action-area {
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90px;
+            height: 36px;
+            z-index: 5;
+        }
+
+        .add-btn-z {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border: 1px solid #d97706;
+            color: #d97706;
+            font-weight: 800;
+            font-size: 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            justify-content: center;
+            text-transform: uppercase;
+            z-index: 10;
+        }
+
+        .add-btn-z:hover {
+            background: #fff8eb;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Removed ::after content "ADD" to fix duplication */
+
+        .qty-control-z {
+            width: 100%;
+            height: 100%;
+            background: white;
+            border: 1px solid #d97706;
+            color: #d97706;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+        }
+
+        .qty-control-z button {
+            width: 28px;
+            height: 100%;
+            background: transparent;
+            border: none;
+            color: #d97706;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+
+        .qty-control-z span {
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        /* CART BAR */
+        .cart-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.15);
+            padding: 16px 18px;
+            display: none;
+            z-index: 60;
+        }
+
+        .cart-inner {
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        .cart-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .place-btn {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            border: none;
+            padding: 14px 26px;
+            border-radius: 999px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- STATUS HEADER -->
+    <div class="status-header">
+        <div class="status-icon">✓</div>
+        <h1 class="status-title">Order Placed!</h1>
+        <div class="status-subtitle">Kitchen has received your order</div>
+    </div>
+
+    <!-- COLLAPSIBLE SUMMARY -->
+    <div class="container order-summary-box">
+        <button class="summary-toggle" onclick="toggleSummary(this)">
+            View Current Order Details
+        </button>
+        <div class="summary-content">
+            <div class="summary-inner">
+                <div id="lastOrderList"></div>
+                <button class="receipt-btn" onclick="alert('Receipt Downloaded!')">Download Receipt</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- UPSELL HEADER -->
+    <div class="container upsell-header">
+        <h3>Still Hungry?</h3>
+        <p>Add more items to your table immediately.</p>
+    </div>
+
+    <!-- SEARCH/FILTER STUBS FOR APP.JS COMPATIBILITY -->
+    <div style="display:none">
+        <input id="searchInput">
+        <div id="searchSuggestions"></div>
+        <div class="lang-switch">
+            <button class="active" data-lang="en"></button>
+        </div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="categories-wrapper">
+        <div class="categories container"></div>
+    </div>
+
+    <!-- MENU GRID -->
+    <div class="menu-grid container" id="menu"></div>
+
+    <!-- CART BAR -->
+    <div class="cart-bar" id="cartBar">
+        <div class="cart-inner">
+            <div id="cartItems"></div>
+            <div class="cart-footer">
+                <strong id="cartTotal">₹0</strong>
+                <button class="place-btn" onclick="placeOrder()">Place Order</button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- SCRIPTS -->
+    <script>
+        // 1. RENDER ACCUMULATED ORDER HISTORY
+        const historyJson = sessionStorage.getItem("qrify_order_history");
+        const summaryList = document.getElementById("lastOrderList");
+
+        let sessionGrandTotal = 0;
+
+        if (historyJson) {
+            try {
+                const history = JSON.parse(historyJson);
+
+                // Sort by new first if needed, currently straightforward push
+                history.forEach((order, index) => {
+                    let orderTotal = 0;
+
+                    // Order Header
+                    summaryList.innerHTML += `
+                        <div style="background:#f3f4f6; padding:8px 12px; font-weight:700; font-size:13px; margin:12px 0 8px; border-radius:6px; color:#374151; display:flex; justify-content:space-between;">
+                            <span>ORDER #${index + 1} • ${order.time}</span>
+                            <span style="color:#10b981;">PAID (${order.method})</span>
+                        </div>
+                    `;
+
+                    Object.keys(order.items).forEach(name => {
+                        const item = order.items[name];
+                        const amt = item.qty * item.price;
+                        orderTotal += amt;
+
+                        summaryList.innerHTML += `
+                            <div class="summary-item">
+                                <span>${name} x${item.qty}</span>
+                                <span>₹${amt}</span>
+                            </div>
+                        `;
+                    });
+
+                    // Add Tax for accurate history representation
+                    const tax = Math.round(orderTotal * 0.05);
+                    const finalOrderTotal = orderTotal + tax;
+                    sessionGrandTotal += finalOrderTotal;
+
+                    summaryList.innerHTML += `
+                        <div class="summary-item" style="border-bottom:1px solid #e5e7eb; padding-bottom:4px; margin-bottom:8px;">
+                            <span style="font-size:12px;">Tax (5%)</span>
+                            <span style="font-size:12px;">₹${tax}</span>
+                        </div>
+                    `;
+                });
+
+                // SESSION GRAND TOTAL
+                summaryList.innerHTML += `
+                    <div class="summary-total" style="font-size:18px; border-top:2px solid #d1d5db; margin-top:16px;">
+                        <span>Total Status Bill</span>
+                        <span>₹${sessionGrandTotal}</span>
+                    </div>
+                `;
+
+            } catch (e) {
+                summaryList.innerHTML = "<p>Order details unavailable.</p>";
+            }
+        } else {
+            summaryList.innerHTML = "<p>No orders found in this session.</p>";
+        }
+
+        function toggleSummary(btn) {
+            btn.classList.toggle("active");
+            const content = btn.nextElementSibling;
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+        }
+    </script>
+
+    <!-- REUSE APP LOGIC FOR MENU -->
+    <script src="./app.js"></script>
+
+</body>
+
+</html>

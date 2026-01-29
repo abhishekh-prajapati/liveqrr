@@ -7,7 +7,7 @@ let cart = {};
 
 
 /* LOAD MENU JSON */
-async function loadMenuJSON(lang){
+async function loadMenuJSON(lang) {
   const res = await fetch(`./menu/menu-${lang}.json`);
   menuData = await res.json();
   renderCategories();
@@ -15,85 +15,113 @@ async function loadMenuJSON(lang){
 }
 
 /* RENDER CATEGORIES */
-function renderCategories(){
+function renderCategories() {
   const box = document.querySelector(".categories");
   box.innerHTML = "";
 
-  Object.keys(menuData).forEach(cat=>{
+  Object.keys(menuData).forEach(cat => {
     const span = document.createElement("span");
     span.textContent = formatCategory(cat);
-    if(cat === activeCategory) span.classList.add("active");
+    if (cat === activeCategory) span.classList.add("active");
 
-    span.onclick = ()=>{
-  activeCategory = cat;
+    span.onclick = () => {
+      activeCategory = cat;
 
-  document.querySelectorAll(".categories span")
-    .forEach(s=>s.classList.remove("active"));
-  span.classList.add("active");
+      document.querySelectorAll(".categories span")
+        .forEach(s => s.classList.remove("active"));
+      span.classList.add("active");
 
-  renderMenu(cat);
+      renderMenu(cat);
 
-  // smooth scroll to menu
-  document.getElementById("menu")
-    .scrollIntoView({ behavior: "smooth", block: "start" });
-};
+      // smooth scroll to menu
+      document.getElementById("menu")
+        .scrollIntoView({ behavior: "smooth", block: "start" });
+    };
 
 
     box.appendChild(span);
   });
 }
 
-/* RENDER MENU */
-function renderMenu(cat){
+/* RENDER MENU (ZOMATO STYLE) */
+function renderMenu(cat) {
   const box = document.getElementById("menu");
-box.innerHTML = `<div class="menu-section" data-cat="${cat}"></div>`;
+  box.innerHTML = `<div class="menu-section" data-cat="${cat}"></div>`;
 
-
-  menuData[cat].forEach((item,i)=>{
+  menuData[cat].forEach((item, i) => {
     const qty = cart[item.name]?.qty || 0;
 
+    // Toggle veg/non-veg styling (simple logic)
+    let isVeg = item.veg;
+    if (item.veg === undefined) {
+      // Infer from category/name if missing
+      isVeg = ["veg", "south", "snacks", "chinese"].includes(cat) && !item.name.toLowerCase().includes("chicken") && !item.name.toLowerCase().includes("egg") && !item.name.toLowerCase().includes("mutton") && !item.name.toLowerCase().includes("fish") && !item.name.toLowerCase().includes("prawn");
+    }
+
+    const dietIcon = isVeg
+      ? `<div class="diet-icon veg"></div>`
+      : `<div class="diet-icon nonveg"></div>`;
+
+    const rating = item.rating || (Math.random() * (4.8 - 3.9) + 3.9).toFixed(1);
+    const votes = Math.floor(Math.random() * 900) + 50;
+
     box.innerHTML += `
-      <div class="card">
-        ${item.offer ? `<div class="badge">${item.offer}</div>` : ""}
-        ${item.bestseller ? `<div class="badge bestseller">★ Bestseller</div>` : ""}
-
-        <img src="./images/${item.img}"
-             onerror="this.src='./images/food-placeholder.jpg'">
-
-        <div class="details">
-          <h4>${item.name}</h4>
-          <div class="price">₹${item.price}</div>
+      <div class="menu-item-z">
+        <div class="menu-left">
+          <div class="menu-meta">
+            ${dietIcon}
+            ${item.bestseller ? `<span class="tag-bestseller">Bestseller</span>` : ""}
+          </div>
+          <h3 class="menu-title">${item.name}</h3>
+          <div class="menu-rating">
+            <div class="stars">${rating} <span class="star-symbol">★</span></div>
+            <span class="votes">(${votes})</span>
+          </div>
+          <div class="menu-price">₹${item.price}</div>
+          <div class="menu-desc">${item.desc || "Deliciously prepared with fresh ingredients."}</div>
         </div>
 
-        <div class="qty">
-          <button onclick="updateCart('${cat}',${i},-1)">−</button>
-          <span>${qty}</span>
-          <button onclick="updateCart('${cat}',${i},1)">+</button>
+        <div class="menu-right">
+          <div class="img-wrapper">
+             <img src="./images/${item.img}" onerror="this.src='./images/food-placeholder.jpg'">
+             
+             <div class="add-action-area">
+                ${qty === 0
+        ? `<button class="add-btn-z" onclick="updateCart('${cat}',${i},1)">ADD</button>`
+        : `<div class="qty-control-z">
+                        <button onclick="updateCart('${cat}',${i},-1)">−</button>
+                        <span>${qty}</span>
+                        <button onclick="updateCart('${cat}',${i},1)">+</button>
+                     </div>`
+      }
+             </div>
+          </div>
         </div>
       </div>
+      <div class="divider-dashed"></div>
     `;
   });
 }
 
 /* CART LOGIC */
-function updateCart(cat,i,change){
+function updateCart(cat, i, change) {
   const item = menuData[cat][i];
-  if(!cart[item.name]) cart[item.name] = {qty:0,price:item.price};
+  if (!cart[item.name]) cart[item.name] = { qty: 0, price: item.price };
 
   cart[item.name].qty += change;
-  if(cart[item.name].qty <= 0) delete cart[item.name];
+  if (cart[item.name].qty <= 0) delete cart[item.name];
 
   renderMenu(cat);
   renderCart();
 }
 
-function renderCart(){
+function renderCart() {
   const bar = document.getElementById("cartBar");
   const list = document.getElementById("cartItems");
   let total = 0;
   list.innerHTML = "";
 
-  Object.keys(cart).forEach(name=>{
+  Object.keys(cart).forEach(name => {
     total += cart[name].qty * cart[name].price;
     list.innerHTML += `${name} × ${cart[name].qty}<br>`;
   });
@@ -102,23 +130,23 @@ function renderCart(){
   bar.style.display = total > 0 ? "block" : "none";
 }
 
-function placeOrder(){
+function placeOrder() {
   alert("Order placed successfully!");
 }
 
 /* LANGUAGE SWITCH */
-document.querySelectorAll(".lang-switch button").forEach(btn=>{
-  btn.onclick = ()=>{
+document.querySelectorAll(".lang-switch button").forEach(btn => {
+  btn.onclick = () => {
     currentLang = btn.dataset.lang;
     document.querySelectorAll(".lang-switch button")
-      .forEach(b=>b.classList.remove("active"));
+      .forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
     loadMenuJSON(currentLang);
   };
 });
 
-function formatCategory(cat){
-  if(cat === "nonveg") return "Non Veg";
+function formatCategory(cat) {
+  if (cat === "nonveg") return "Non Veg";
   return cat.charAt(0).toUpperCase() + cat.slice(1);
 }
 
@@ -204,15 +232,21 @@ searchInput.addEventListener("input", () => {
 
       // 3️⃣ Scroll after DOM updates
       setTimeout(() => {
-        const cards = document.querySelectorAll(".card h4");
-        cards.forEach(h4 => {
-          if (h4.textContent === result.name) {
-            const card = h4.closest(".card");
-            card.scrollIntoView({ behavior: "smooth", block: "center" });
-            card.style.boxShadow = "0 0 0 3px rgba(245,158,11,0.6)";
-            setTimeout(() => card.style.boxShadow = "", 1200);
+        const titleElements = document.querySelectorAll(".menu-title");
+        let target = null;
+        // Find element by text content
+        for (const t of titleElements) {
+          if (t.textContent === result.name) {
+            target = t.closest(".menu-item-z");
+            break;
           }
-        });
+        }
+
+        if (target) {
+          target.scrollIntoView({ behavior: "smooth", block: "center" });
+          target.style.background = "#fffbeb";
+          setTimeout(() => target.style.background = "white", 1200);
+        }
       }, 100);
     };
 
@@ -237,12 +271,11 @@ langDropdown.addEventListener("change", () => {
 
 
 //redirect to payment
-function placeOrder(){
-  if(Object.keys(cart).length === 0){
+function placeOrder() {
+  if (Object.keys(cart).length === 0) {
     alert("Cart is empty");
     return;
   }
   sessionStorage.setItem("qrify_cart", JSON.stringify(cart));
   window.location.href = "payment.html";
 }
-

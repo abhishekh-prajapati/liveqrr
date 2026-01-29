@@ -1,225 +1,587 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Demo Payment | QRIFY</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Secure Checkout | QRIFY</title>
+  <style>
+    :root {
+      --bg: #f8f9fa;
+      --surface: #ffffff;
+      --primary: #111827;
+      --secondary: #d97706;
+      /* Branding Orange */
+      --border: #e5e7eb;
+      --success: #10b981;
+      --text-muted: #6b7280;
+      --shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    }
 
-<style>
-:root{
-  --bg:#F7F7F5;
-  --surface:#FFFFFF;
-  --primary:#1F2937;
-  --secondary:#D97706;
-  --accent:#F59E0B;
-  --border:#E5E7EB;
-  --shadow:0 12px 30px rgba(0,0,0,.15);
-}
+    * {
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+    }
 
-*{ box-sizing:border-box; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      margin: 0;
+      color: var(--primary);
+      padding-bottom: 40px;
+    }
 
-body{
-  margin:0;
-  font-family:Inter, system-ui, sans-serif;
-  background:var(--bg);
-  color:var(--primary);
-}
+    /* HEADER */
+    .checkout-header {
+      background: var(--surface);
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
 
-.container{
-  max-width:520px;
-  margin:auto;
-  padding:20px;
-}
+    .brand {
+      font-weight: 700;
+      font-size: 18px;
+      color: var(--secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
 
-.card{
-  background:var(--surface);
-  border-radius:22px;
-  padding:20px;
-  box-shadow:var(--shadow);
-  margin-bottom:16px;
-}
+    .brand span {
+      color: var(--primary);
+      font-weight: 500;
+      font-size: 14px;
+    }
 
-h2{
-  margin:0 0 14px;
-  color:var(--secondary);
-}
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--success);
+      font-weight: 600;
+      background: #ecfdf5;
+      padding: 4px 8px;
+      border-radius: 4px;
+    }
 
-/* ITEMS */
-.item{
-  display:flex;
-  justify-content:space-between;
-  font-size:14px;
-  margin-bottom:8px;
-}
+    .container {
+      max-width: 480px;
+      /* Mobile-first gateway width */
+      margin: 20px auto;
+      padding: 0 16px;
+    }
 
-.total{
-  display:flex;
-  justify-content:space-between;
-  font-weight:700;
-  font-size:16px;
-  margin-top:12px;
-}
+    /* CARD STYLE */
+    .card {
+      background: var(--surface);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
 
-/* PAYMENT OPTIONS */
-.pay-option{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:14px;
-  border-radius:16px;
-  border:1px solid var(--border);
-  margin-bottom:10px;
-  cursor:pointer;
-}
+    /* ORDER SUMMARY */
+    .summary-header {
+      background: #fdfdfd;
+      padding: 16px;
+      border-bottom: 1px solid var(--border);
+    }
 
-.pay-option.active{
-  background:#FEF3C7;
-  border-color:var(--accent);
-}
+    .summary-title {
+      font-size: 14px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
 
-.pay-option input{
-  accent-color:var(--accent);
-}
+    .order-total-large {
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--primary);
+    }
 
-/* BUTTONS */
-.pay-btn{
-  width:100%;
-  padding:16px;
-  border:none;
-  border-radius:999px;
-  font-size:16px;
-  font-weight:600;
-  cursor:pointer;
-  margin-bottom:10px;
-}
+    .item-list {
+      padding: 16px;
+      background: var(--surface);
+    }
 
-.pay-now{
-  background:linear-gradient(135deg,#F59E0B,#D97706);
-  color:white;
-}
+    .item-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: var(--primary);
+    }
 
-.cash-btn{
-  background:#fff;
-  color:var(--secondary);
-  border:2px dashed var(--secondary);
-}
+    .item-row span:last-child {
+      font-weight: 600;
+    }
 
-/* LOADER */
-.loader{
-  text-align:center;
-  font-size:15px;
-  padding:20px;
-  display:none;
-  color:var(--muted);
-}
-</style>
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 12px 0;
+      border: none;
+    }
+
+    /* PAYMENT METHODS */
+    .section-title {
+      font-weight: 600;
+      margin: 0 0 12px;
+      font-size: 16px;
+    }
+
+    .payment-method {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 10px;
+      transition: all 0.2s;
+      background: var(--surface);
+      overflow: hidden;
+    }
+
+    .payment-method.active {
+      border-color: var(--secondary);
+      background: #fffbf2;
+      /* Light orange tint */
+      box-shadow: 0 0 0 1px var(--secondary);
+    }
+
+    .method-header {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      cursor: pointer;
+      gap: 12px;
+    }
+
+    .radio-custom {
+      width: 18px;
+      height: 18px;
+      border: 2px solid #d1d5db;
+      border-radius: 50%;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .payment-method.active .radio-custom {
+      border-color: var(--secondary);
+    }
+
+    .payment-method.active .radio-custom::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: var(--secondary);
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    .method-info {
+      flex: 1;
+    }
+
+    .method-title {
+      font-weight: 500;
+      font-size: 15px;
+    }
+
+    .method-icons {
+      display: flex;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .pay-icon {
+      height: 16px;
+      opacity: 0.7;
+    }
+
+    /* METHOD DETAILS (Inputs) */
+    .method-body {
+      display: none;
+      padding: 0 16px 16px;
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      margin-top: -4px;
+      padding-top: 12px;
+    }
+
+    .payment-method.active .method-body {
+      display: block;
+    }
+
+    .input-group {
+      margin-bottom: 12px;
+    }
+
+    .input-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      display: block;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-size: 14px;
+      outline: none;
+      background: white;
+    }
+
+    .form-input:focus {
+      border-color: var(--secondary);
+      box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.1);
+    }
+
+    .form-row {
+      display: flex;
+      gap: 12px;
+    }
+
+    /* BOTTOM BAR */
+    .pay-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      padding: 16px;
+      box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.05);
+      border-top: 1px solid var(--border);
+    }
+
+    .pay-button {
+      width: 100%;
+      max-width: 480px;
+      margin: auto;
+      display: block;
+      background: var(--secondary);
+      color: white;
+      padding: 14px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .pay-button:hover {
+      background: #b45309;
+    }
+
+    /* OVERLAYS */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(255, 255, 255, 0.95);
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid var(--secondary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-bottom: 16px;
+    }
+
+    .success-icon {
+      width: 60px;
+      height: 60px;
+      background: var(--success);
+      border-radius: 50%;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 30px;
+      margin-bottom: 16px;
+      animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes pop {
+      0% {
+        transform: scale(0);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="container">
-
-  <!-- SUMMARY -->
-  <div class="card">
-    <h2>Payment Summary</h2>
-    <div id="items"></div>
-    <div class="total">
-      <span>Total</span>
-      <span id="totalAmount">₹0</span>
+  <header class="checkout-header">
+    <div class="brand">QRIFY <span>PAY</span></div>
+    <div class="secure-badge">
+      Secure Process
+      <svg width="12" height="12" fill="currentColor" viewBox="0 0 24 24">
+        <path
+          d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
+      </svg>
     </div>
+  </header>
+
+  <div class="container">
+
+    <!-- Summary Card -->
+    <div class="card">
+      <div class="summary-header">
+        <div class="summary-title">Amount to Pay</div>
+        <div class="order-total-large" id="displayTotal">₹0.00</div>
+      </div>
+      <div class="item-list" id="itemList">
+        <!-- Items injected here -->
+      </div>
+    </div>
+
+    <div class="section-title">Select Payment Method</div>
+
+    <!-- UPI -->
+    <div class="payment-method active" onclick="selectMethod(this, 'upi')">
+      <div class="method-header">
+        <div class="radio-custom"></div>
+        <div class="method-info">
+          <div class="method-title">UPI / Valid VPA</div>
+          <div class="method-icons">
+            <span style="font-size: 10px; background: #e0e0e0; padding: 2px 4px; border-radius: 3px;">GPay</span>
+            <span style="font-size: 10px; background: #e0e0e0; padding: 2px 4px; border-radius: 3px;">PhonePe</span>
+            <span style="font-size: 10px; background: #e0e0e0; padding: 2px 4px; border-radius: 3px;">BHIM</span>
+          </div>
+        </div>
+      </div>
+      <div class="method-body">
+        <div class="input-group">
+          <label class="input-label">Enter UPI ID</label>
+          <input type="text" class="form-input" placeholder="e.g. 9876543210@upi">
+        </div>
+      </div>
+    </div>
+
+    <!-- Card -->
+    <div class="payment-method" onclick="selectMethod(this, 'card')">
+      <div class="method-header">
+        <div class="radio-custom"></div>
+        <div class="method-info">
+          <div class="method-title">Credit / Debit Card</div>
+          <div class="method-icons">
+            <span style="font-size: 10px; background: #e0e0e0; padding: 2px 4px; border-radius: 3px;">VISA</span>
+            <span style="font-size: 10px; background: #e0e0e0; padding: 2px 4px; border-radius: 3px;">MasterCard</span>
+          </div>
+        </div>
+      </div>
+      <div class="method-body">
+        <div class="input-group">
+          <label class="input-label">Card Number</label>
+          <input type="text" class="form-input" placeholder="0000 0000 0000 0000" maxlength="19">
+        </div>
+        <div class="form-row">
+          <div class="input-group" style="flex:1">
+            <label class="input-label">Expiry</label>
+            <input type="text" class="form-input" placeholder="MM/YY" maxlength="5">
+          </div>
+          <div class="input-group" style="flex:1">
+            <label class="input-label">CVV</label>
+            <input type="password" class="form-input" placeholder="123" maxlength="3">
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cash -->
+    <div class="payment-method" onclick="selectMethod(this, 'cash')">
+      <div class="method-header">
+        <div class="radio-custom"></div>
+        <div class="method-info">
+          <div class="method-title">Cash at Counter</div>
+          <div class="method-icons" style="color:#666; font-size:12px;">Pay directly after ordering</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="height: 60px;"></div> <!-- Spacer -->
+
   </div>
 
-  <!-- ONLINE PAYMENT OPTIONS -->
-  <div class="card">
-    <div class="pay-option active" onclick="selectPay(this)">
-      <input type="radio" checked>
-      <span>UPI</span>
-    </div>
-
-    <div class="pay-option" onclick="selectPay(this)">
-      <input type="radio">
-      <span>Debit / Credit Card</span>
-    </div>
+  <!-- Sticky Pay Button -->
+  <div class="pay-bar">
+    <button class="pay-button" id="payButton" onclick="processPayment()">
+      Pay <span id="btnAmount">₹0</span>
+    </button>
   </div>
 
-  <!-- ACTION BUTTONS -->
-  <button class="pay-btn pay-now" onclick="startDemoPayment()">Pay Now</button>
-  <button class="pay-btn cash-btn" onclick="cashPayment()">Cash Payment</button>
+  <!-- Processing Overlay -->
+  <div class="overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <h3>Processing Securely...</h3>
+    <p style="font-size:13px; color:#666;">Do not close this window</p>
+  </div>
 
-  <div class="loader" id="loader">Processing payment…</div>
+  <!-- Success Overlay -->
+  <div class="overlay" id="successOverlay">
+    <div class="success-icon">✓</div>
+    <h2>Payment Successful!</h2>
+    <p>Your order has been placed.</p>
+  </div>
 
-</div>
-
-<script>
-const cart = JSON.parse(sessionStorage.getItem("qrify_cart"));
-const itemsBox = document.getElementById("items");
-const totalBox = document.getElementById("totalAmount");
-const loader = document.getElementById("loader");
-
-if(!cart){
-  window.location.href = "home.html";
-}
-
-let total = 0;
-
-/* Render items */
-Object.keys(cart).forEach(name=>{
-  const { qty, price } = cart[name];
-  const amt = qty * price;
-  total += amt;
-
-  itemsBox.innerHTML += `
-    <div class="item">
-      <span>${name} × ${qty}</span>
-      <span>₹${amt}</span>
-    </div>
-  `;
-});
-
-totalBox.textContent = "₹" + total;
-
-/* Payment option UI */
-function selectPay(el){
-  document.querySelectorAll(".pay-option").forEach(o=>{
-    o.classList.remove("active");
-    o.querySelector("input").checked = false;
-  });
-  el.classList.add("active");
-  el.querySelector("input").checked = true;
-}
-
-/* DEMO ONLINE PAYMENT */
-function startDemoPayment(){
-  loader.style.display = "block";
-
-  setTimeout(() => {
-    loader.style.display = "none";
-
-    // 80% success rate
-    if(Math.random() < 0.8){
-      alert("Online Payment Successful (Demo)");
-      finishOrder();
-    }else{
-      alert("Online Payment Failed (Demo). Try again.");
+  <script>
+    // Load Data
+    const cart = JSON.parse(sessionStorage.getItem("qrify_cart"));
+    if (!cart) {
+      window.location.href = "home.html";
     }
-  }, 2000);
-}
 
-/* CASH PAYMENT */
-function cashPayment(){
-  const confirmCash = confirm("Confirm cash payment at counter?");
-  if(confirmCash){
-    alert("Order placed. Please pay cash at counter.");
-    finishOrder();
-  }
-}
+    let total = 0;
+    const itemList = document.getElementById("itemList");
 
-/* COMMON FINISH */
-function finishOrder(){
-  sessionStorage.removeItem("qrify_cart");
-  window.location.href = "home.html";
-}
-</script>
+    Object.keys(cart).forEach(name => {
+      const item = cart[name];
+      const sum = item.price * item.qty;
+      total += sum;
+
+      itemList.innerHTML += `
+                <div class="item-row">
+                    <span>${name} <span style="color:#888; font-size:12px;">x${item.qty}</span></span>
+                    <span>₹${sum}</span>
+                </div>
+            `;
+    });
+
+    // Add taxes/fees dummy
+    const tax = Math.round(total * 0.05);
+    const grandTotal = total + tax;
+
+    itemList.innerHTML += `
+            <hr class="divider">
+            <div class="item-row">
+                <span style="color:#666;">Taxes & Charges (5%)</span>
+                <span>₹${tax}</span>
+            </div>
+            <div class="item-row" style="font-weight:700; font-size:16px; margin-top:8px;">
+                <span>Grand Total</span>
+                <span>₹${grandTotal}</span>
+            </div>
+        `;
+
+    document.getElementById("displayTotal").textContent = "₹" + grandTotal;
+    document.getElementById("btnAmount").textContent = "₹" + grandTotal;
+
+    // Interaction
+    let selectedMethod = 'upi';
+
+    function selectMethod(el, method) {
+      // Remove active class from all
+      document.querySelectorAll('.payment-method').forEach(m => m.classList.remove('active'));
+      // Add to current
+      el.classList.add('active');
+      selectedMethod = method;
+
+      const btn = document.getElementById('payButton');
+      if (method === 'cash') {
+        btn.textContent = `Place Order (Pay Cash)`;
+        btn.style.background = "#4b5563"; // gray for cash
+      } else {
+        btn.textContent = `Pay ₹${grandTotal}`;
+        btn.style.background = "#d97706"; // orange for online
+      }
+    }
+
+    function processPayment() {
+      // VALIDATION
+      if (selectedMethod === 'upi') {
+        const upiInput = document.querySelector('.payment-method.active input').value.trim();
+        if (!upiInput) {
+          alert('Please enter a valid UPI ID');
+          return;
+        }
+      } else if (selectedMethod === 'card') {
+        const inputs = document.querySelectorAll('.payment-method.active input');
+        // Basic check: ensure all card fields have some value
+        let valid = true;
+        inputs.forEach(inp => {
+          if (!inp.value.trim()) valid = false;
+        });
+        if (!valid) {
+          alert('Please enter all card details');
+          return;
+        }
+      }
+
+      const loading = document.getElementById('loadingOverlay');
+      const success = document.getElementById('successOverlay');
+
+      loading.style.display = 'flex';
+
+      // Simulate Delay
+      setTimeout(() => {
+        loading.style.display = 'none';
+        success.style.display = 'flex';
+
+        // --- ORDER HISTORY LOGIC ---
+        const currentCart = JSON.parse(sessionStorage.getItem("qrify_cart"));
+        let history = JSON.parse(sessionStorage.getItem("qrify_order_history")) || [];
+
+        // Add new order with timestamp
+        history.push({
+          id: Date.now(),
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          items: currentCart,
+          status: 'Paid',
+          method: selectedMethod.toUpperCase()
+        });
+
+        sessionStorage.setItem("qrify_order_history", JSON.stringify(history));
+
+        // Clear active cart and redirect
+        sessionStorage.removeItem("qrify_cart");
+
+        setTimeout(() => {
+          window.location.href = "extrafood.html";
+        }, 2000);
+
+      }, 2500);
+    }
+  </script>
 
 </body>
+
 </html>

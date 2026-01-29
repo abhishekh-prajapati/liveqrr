@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>User Details</title>
+
+    <style>
+      /* ========= COLOR SYSTEM (MATCH HOME) ========= */
+      :root {
+        --bg: #f7f7f5;
+        --surface: #ffffff;
+        --primary: #1f2937;
+        --secondary: #d97706; /* gold */
+        --accent: #f59e0b; /* orange */
+        --muted: #6b7280;
+        --border: #e5e7eb;
+        --shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family:
+          Inter,
+          system-ui,
+          -apple-system,
+          sans-serif;
+        background: linear-gradient(180deg, #fff7ed, var(--bg));
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+      }
+
+      /* ===== FORM CARD ===== */
+      form {
+        background: var(--surface);
+        padding: 28px;
+        border-radius: 20px;
+        width: 100%;
+        max-width: 360px;
+        box-shadow: var(--shadow);
+      }
+
+      form h3 {
+        margin: 0 0 18px;
+        font-size: 20px;
+        font-weight: 600;
+        color: var(--primary);
+      }
+
+      /* ===== INPUTS ===== */
+      input {
+        width: 100%;
+        padding: 14px;
+        margin-top: 12px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        font-size: 15px;
+        background: #fffbf5;
+      }
+
+      input::placeholder {
+        color: var(--muted);
+      }
+
+      input:focus {
+        outline: none;
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
+      }
+
+      /* ===== BUTTON ===== */
+      button {
+        margin-top: 22px;
+        width: 100%;
+        padding: 14px;
+        border: none;
+        background: linear-gradient(135deg, var(--accent), var(--secondary));
+        color: white;
+        font-weight: 600;
+        border-radius: 999px;
+        cursor: pointer;
+        font-size: 15px;
+      }
+
+      button:hover {
+        opacity: 0.95;
+      }
+    </style>
+  </head>
+
+  <body>
+    <form id="userForm">
+      <h3>Enter Your Details</h3>
+
+      <input
+        type="text"
+        id="username"
+        placeholder="Your Name"
+        autocomplete="name"
+        required
+      />
+
+      <input
+        type="tel"
+        id="mobile"
+        placeholder="Mobile Number"
+        inputmode="numeric"
+        autocomplete="tel"
+        required
+      />
+
+      <button type="submit">Continue</button>
+    </form>
+
+    <script src="./auth.js"></script>
+  </body>
+</html>

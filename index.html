@@ -1,123 +1,160 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>User Details</title>
 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRIFY | Order Now</title>
     <style>
-      /* ========= COLOR SYSTEM (MATCH HOME) ========= */
-      :root {
-        --bg: #f7f7f5;
-        --surface: #ffffff;
-        --primary: #1f2937;
-        --secondary: #d97706; /* gold */
-        --accent: #f59e0b; /* orange */
-        --muted: #6b7280;
-        --border: #e5e7eb;
-        --shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
-      }
+        :root {
+            --bg: #ffffff;
+            --text: #111111;
+            --accent: #d97706;
+            /* Gold */
+            --accent-glow: rgba(217, 119, 6, 0.25);
+        }
 
-      * {
-        box-sizing: border-box;
-      }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            background-image:
+                radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.08) 0%, transparent 50%);
+        }
 
-      body {
-        margin: 0;
-        font-family:
-          Inter,
-          system-ui,
-          -apple-system,
-          sans-serif;
-        background: linear-gradient(180deg, #fff7ed, var(--bg));
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
-      }
+        .container {
+            text-align: center;
+            padding: 24px;
+            animation: fadeIn 1.2s ease-out;
+        }
 
-      /* ===== FORM CARD ===== */
-      form {
-        background: var(--surface);
-        padding: 28px;
-        border-radius: 20px;
-        width: 100%;
-        max-width: 360px;
-        box-shadow: var(--shadow);
-      }
+        .brand-name {
+            font-size: 3rem;
+            font-weight: 800;
+            letter-spacing: -2px;
+            margin-bottom: 8px;
+            background: linear-gradient(135deg, #000000 30%, #d97706 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            opacity: 0;
+            animation: slideUp 0.8s ease-out forwards 0.2s;
+        }
 
-      form h3 {
-        margin: 0 0 18px;
-        font-size: 20px;
-        font-weight: 600;
-        color: var(--primary);
-      }
+        .tagline {
+            font-size: 1rem;
+            color: #888;
+            margin-bottom: 48px;
+            font-weight: 400;
+            opacity: 0;
+            animation: slideUp 0.8s ease-out forwards 0.4s;
+        }
 
-      /* ===== INPUTS ===== */
-      input {
-        width: 100%;
-        padding: 14px;
-        margin-top: 12px;
-        border-radius: 12px;
-        border: 1px solid var(--border);
-        font-size: 15px;
-        background: #fffbf5;
-      }
+        .order-btn {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 18px 48px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 99px;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 20px var(--accent-glow);
+            opacity: 0;
+            animation: slideUp 0.8s ease-out forwards 0.6s;
+            border: 1px solid transparent;
+        }
 
-      input::placeholder {
-        color: var(--muted);
-      }
+        .order-btn:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 30px var(--accent-glow);
+            letter-spacing: 0.5px;
+        }
 
-      input:focus {
-        outline: none;
-        border-color: var(--secondary);
-        box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
-      }
+        .order-btn:active {
+            transform: translateY(1px);
+        }
 
-      /* ===== BUTTON ===== */
-      button {
-        margin-top: 22px;
-        width: 100%;
-        padding: 14px;
-        border: none;
-        background: linear-gradient(135deg, var(--accent), var(--secondary));
-        color: white;
-        font-weight: 600;
-        border-radius: 999px;
-        cursor: pointer;
-        font-size: 15px;
-      }
+        /* Ambient elements */
+        .ambient-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--accent);
+            filter: blur(80px);
+            opacity: 0.1;
+            z-index: -1;
+        }
 
-      button:hover {
-        opacity: 0.95;
-      }
+        .c1 {
+            top: -10%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+        }
+
+        .c2 {
+            bottom: -10%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            animation: breathe 8s infinite alternate;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes breathe {
+            from {
+                transform: scale(1);
+                opacity: 0.08;
+            }
+
+            to {
+                transform: scale(1.2);
+                opacity: 0.12;
+            }
+        }
     </style>
-  </head>
+</head>
 
-  <body>
-    <form id="userForm">
-      <h3>Enter Your Details</h3>
+<body>
 
-      <input
-        type="text"
-        id="username"
-        placeholder="Your Name"
-        autocomplete="name"
-        required
-      />
+    <div class="ambient-circle c1"></div>
+    <div class="ambient-circle c2"></div>
 
-      <input
-        type="tel"
-        id="mobile"
-        placeholder="Mobile Number"
-        inputmode="numeric"
-        autocomplete="tel"
-        required
-      />
+    <div class="container">
+        <h1 class="brand-name">QRIFY</h1>
+        <p class="tagline">Premium Dining Experience</p>
+        <a href="home.html" class="order-btn">Order Now</a>
+    </div>
 
-      <button type="submit">Continue</button>
-    </form>
+</body>
 
-    <script src="./auth.js"></script>
-  </body>
 </html>
