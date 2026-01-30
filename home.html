@@ -84,67 +84,9 @@
       font-weight: 500;
     }
 
-    /* ===== SEARCH ===== */
-    .search-box {
-      position: relative;
-      margin-right: 12px;
-      flex-shrink: 0;
-    }
-
-    /* Base (desktop-first) */
-    #searchInput {
-      padding: 8px 16px;
-      border-radius: 999px;
-      border: 1px solid var(--border);
-      font-size: 14px;
-      width: 360px;
-      max-width: 100%;
-    }
-
-    /* Suggestions inherit width */
-    #searchSuggestions {
-      position: absolute;
-      top: 44px;
-      left: 0;
-      right: 0;
-      background: var(--surface);
-      border-radius: 14px;
-      box-shadow: var(--shadow);
-      max-height: 260px;
-      overflow-y: auto;
-      display: none;
-      z-index: 100;
-    }
-
-    #searchSuggestions div {
-      padding: 10px 14px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    #searchSuggestions div:hover {
-      background: #fef3c7;
-    }
-
-    @media (max-width: 1024px) {
-      #searchInput {
-        width: 260px;
-      }
-    }
-
     @media (max-width: 640px) {
       .nav-inner {
         gap: 10px;
-      }
-
-      #searchInput {
-        width: 100%;
-        max-width: 100%;
-      }
-
-      .search-box {
-        flex: 1;
-        margin-right: 0;
       }
     }
 
@@ -165,39 +107,268 @@
       border-color: var(--secondary);
     }
 
-    /* ===== HERO ===== */
-    .hero {
-      padding: 26px 18px;
+    /* ===== OFFER CAROUSEL ===== */
+    .offer-carousel {
+      padding: 20px 40px;
+      /* More side gap for laptop */
+      overflow: hidden;
+      position: relative;
     }
 
-    .hero-card {
-      background: var(--surface);
-      border-radius: 22px;
-      padding: 28px;
-      box-shadow: var(--shadow);
+    .carousel-container {
+      display: flex;
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      width: 100%;
     }
 
-    .hero-card h2 {
+    .carousel-slide {
+      min-width: 100%;
+      flex-shrink: 0;
+      padding: 10px;
+    }
+
+    .offer-card {
+      background: radial-gradient(circle at center, #ff4d6d 0%, #c9184a 100%);
+      border-radius: 24px;
+      height: 200px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+      color: white;
+      box-shadow: 0 10px 25px rgba(201, 24, 74, 0.3);
+    }
+
+    .offer-content h2 {
       margin: 0;
-      font-size: 26px;
+      font-size: 38px;
+      font-weight: 900;
+      text-transform: uppercase;
+      line-height: 1;
+      font-style: italic;
+      text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+    }
+
+    .offer-content h3 {
+      margin: 5px 0;
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 1;
+      text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .offer-content p {
+      margin: 10px 0;
+      font-size: 16px;
       font-weight: 600;
+      opacity: 0.95;
     }
 
-    .hero-card p {
-      margin: 10px 0 18px;
-      font-size: 15px;
-      max-width: 520px;
-      color: var(--muted);
-    }
-
-    .hero-tags span {
-      display: inline-block;
-      padding: 6px 14px;
+    .order-btn {
+      background: black;
+      color: white;
+      border: none;
+      padding: 10px 24px;
       border-radius: 999px;
-      font-size: 12px;
-      margin-right: 6px;
-      background: #fef3c7;
-      color: #92400e;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 15px;
+      transition: transform 0.2s;
+    }
+
+    .order-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .offer-images {
+      position: absolute;
+      right: 40px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      gap: -20px;
+    }
+
+    .floating-food {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 4px solid white;
+      object-fit: cover;
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+      background: white;
+    }
+
+    .floating-food:nth-child(2) {
+      margin-left: -40px;
+      transform: scale(0.85) rotate(-10deg);
+      z-index: 1;
+    }
+
+    .coupon-icon {
+      position: absolute;
+      background: #ffe5ec;
+      color: #c9184a;
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-weight: 900;
+      font-size: 10px;
+      box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+      transform: rotate(-15deg);
+    }
+
+    .c1 {
+      top: 20px;
+      left: 20px;
+    }
+
+    .c2 {
+      top: 20px;
+      right: 20px;
+      transform: rotate(15deg);
+    }
+
+    .c3 {
+      bottom: 20px;
+      left: 40px;
+      transform: rotate(10deg);
+    }
+
+    .carousel-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 10;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .dot.active {
+      width: 24px;
+      border-radius: 4px;
+      background: white;
+      /* Changed to white for better visibility on dark gradients */
+    }
+
+    .divider-dashed {
+      border-bottom: 1px dashed var(--border);
+      margin: 0 16px;
+    }
+
+    /* Fix peeking issue in carousel */
+    .offer-carousel .container {
+      overflow: hidden !important;
+      border-radius: 24px;
+    }
+
+    /* Repositioned Search Box Styling */
+    .search-container {
+      padding: 15px 18px;
+      background: var(--bg);
+    }
+
+    .search-box {
+      position: relative;
+      width: 100%;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    #searchInput {
+      width: 100%;
+      padding: 12px 20px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      font-size: 16px;
+      box-shadow: var(--shadow);
+      outline: none;
+    }
+
+    #searchSuggestions {
+      top: 50px;
+    }
+
+    /* CUSTOM POPUP STYLING */
+    #customPopup {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-100px);
+      background: white;
+      padding: 15px 30px;
+      border-radius: 999px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #customPopup.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    #customPopup .icon {
+      width: 24px;
+      height: 24px;
+      background: var(--secondary);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    @media (max-width: 640px) {
+      .offer-carousel {
+        padding: 20px 0;
+      }
+
+      .carousel-slide {
+        padding: 0;
+      }
+
+      .offer-card {
+        padding: 0 20px;
+        height: 220px;
+        border-radius: 0;
+      }
+
+      .offer-content h3 {
+        font-size: 40px;
+      }
+
+      .offer-content h2 {
+        font-size: 28px;
+      }
+
+      .floating-food {
+        width: 80px;
+        height: 80px;
+      }
+
+      .offer-images {
+        right: 10px;
+      }
     }
 
     /* ===== CATEGORIES WRAPPER ===== */
@@ -549,12 +720,11 @@
         <span class="brand-name">QRIFY</span>
       </div>
 
-      <div class="search-box">
-        <input type="text" id="searchInput" placeholder="Search dishes..." autocomplete="off" />
-        <div id="searchSuggestions"></div>
-      </div>
 
       <div class="lang-switch">
+        <button onclick="location.href='offers.html'"
+          style="background: var(--accent); color: white; border: none; padding: 6px 15px; border-radius: 999px; cursor: pointer; font-weight: 700; margin-right: 10px;">DEALS
+          🔥</button>
         <button data-lang="en" class="active">EN</button>
         <button data-lang="hi">हिंदी</button>
         <button data-lang="mr">मराठी</button>
@@ -568,17 +738,118 @@
     </div>
   </nav>
 
-  <!-- ===== HERO ===== -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-card">
-        <h2>Good Food. No Waiting.</h2>
-        <p>Browse the complete menu and order directly from your table.</p>
-        <div class="hero-tags">
-          <span>Trusted Kitchen</span>
-          <span>Quick Service</span>
-          <span>Premium Quality</span>
+  <!-- ===== SEARCH BELOW NAV ===== -->
+  <div class="search-container">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search for dishes, cuisines..." autocomplete="off" />
+      <div id="searchSuggestions"></div>
+    </div>
+  </div>
+
+  <!-- ===== OFFER CAROUSEL ===== -->
+  <section class="offer-carousel">
+    <div class="container overflow-hidden" style="position: relative;">
+      <div class="carousel-container" id="carouselContainer">
+        <!-- Slide 1 -->
+        <div class="carousel-slide">
+          <div class="offer-card">
+            <div class="coupon-icon c1">%</div>
+            <div class="coupon-icon c2">%</div>
+            <div class="coupon-icon c3">%</div>
+            <div class="offer-content">
+              <h2>FLAT</h2>
+              <h3>50% OFF</h3>
+              <p>with FREE delivery</p>
+              <button class="order-btn"
+                onclick="document.getElementById('menu').scrollIntoView({behavior: 'smooth'})">Order now
+                &rsaquo;</button>
+            </div>
+            <div class="offer-images">
+              <img src="images/panner_butter_masala.jpg" alt="Paneer Butter Masala" class="floating-food">
+              <img src="images/Chicken_Biryani.webp" alt="Chicken Biryani" class="floating-food">
+            </div>
+          </div>
         </div>
+        <!-- Slide 2 -->
+        <div class="carousel-slide">
+          <div class="offer-card"
+            style="background: radial-gradient(circle at center, #4361ee 0%, #3f37c9 100%); box-shadow: 0 10px 25px rgba(63, 55, 201, 0.3);">
+            <div class="coupon-icon c1" style="color: #3f37c9;">★</div>
+            <div class="offer-content">
+              <h2>COMBO</h2>
+              <h3>SAVE 30%</h3>
+              <p>Special Weekend Deals</p>
+              <button class="order-btn"
+                onclick="document.getElementById('menu').scrollIntoView({behavior: 'smooth'})">View Menu
+                &rsaquo;</button>
+            </div>
+            <div class="offer-images">
+              <img src="images/Veg-Fried-Rice.webp" alt="Veg Fried Rice" class="floating-food">
+              <img src="images/Chicken-Manchurian.jpg" alt="Chicken Manchurian" class="floating-food">
+            </div>
+          </div>
+        </div>
+        <!-- Slide 3 -->
+        <div class="carousel-slide">
+          <div class="offer-card"
+            style="background: radial-gradient(circle at center, #2b9348 0%, #007f5f 100%); box-shadow: 0 10px 25px rgba(0, 127, 95, 0.3);">
+            <div class="coupon-icon c2" style="color: #007f5f;">FREE</div>
+            <div class="offer-content">
+              <h2>FRESH</h2>
+              <h3>BUY 1 GET 1</h3>
+              <p>On all Veg Main Course</p>
+              <button class="order-btn"
+                onclick="document.getElementById('menu').scrollIntoView({behavior: 'smooth'})">Order now
+                &rsaquo;</button>
+            </div>
+            <div class="offer-images">
+              <img src="images/dal_tadka.jpg" alt="Dal Tadka" class="floating-food">
+              <img src="images/veg_handi.jpg" alt="Veg Handi" class="floating-food">
+            </div>
+          </div>
+        </div>
+        <!-- Slide 4 -->
+        <div class="carousel-slide">
+          <div class="offer-card"
+            style="background: radial-gradient(circle at center, #fb8500 0%, #ffb703 100%); box-shadow: 0 10px 25px rgba(251, 133, 0, 0.3);">
+            <div class="coupon-icon c3" style="color: #fb8500;">NEW</div>
+            <div class="offer-content">
+              <h2>DESI</h2>
+              <h3>UP TO 40%</h3>
+              <p>Authentic North Indian</p>
+              <button class="order-btn"
+                onclick="document.getElementById('menu').scrollIntoView({behavior: 'smooth'})">Explore &rsaquo;</button>
+            </div>
+            <div class="offer-images">
+              <img src="images/Chicken_Curry.webp" alt="Chicken Curry" class="floating-food">
+              <img src="images/Mutton_Biryani.webp" alt="Mutton Biryani" class="floating-food">
+            </div>
+          </div>
+        </div>
+        <!-- Slide 5 -->
+        <div class="carousel-slide">
+          <div class="offer-card"
+            style="background: radial-gradient(circle at center, #7209b7 0%, #560bad 100%); box-shadow: 0 10px 25px rgba(114, 9, 183, 0.3);">
+            <div class="coupon-icon c1" style="color: #7209b7;">%</div>
+            <div class="offer-content">
+              <h2>SNACKS</h2>
+              <h3>FLAT ₹100 OFF</h3>
+              <p>On Orders above ₹400</p>
+              <button class="order-btn">Order now &rsaquo;</button>
+            </div>
+            <div class="offer-images">
+              <img src="images/Chicken_Lollipop.webp" alt="Lollipop" class="floating-food">
+              <img src="images/Fish_Fry.webp" alt="Fish Fry" class="floating-food">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-dots" id="carouselDots">
+        <div class="dot active" data-index="0"></div>
+        <div class="dot" data-index="1"></div>
+        <div class="dot" data-index="2"></div>
+        <div class="dot" data-index="3"></div>
+        <div class="dot" data-index="4"></div>
       </div>
     </div>
   </section>
@@ -605,6 +876,43 @@
   <!-- ===== SCRIPTS ===== -->
   <script src="./auth.js"></script>
   <script src="./app.js"></script>
+  <script>
+    // ===== CAROUSEL LOGIC =====
+    const container = document.getElementById('carouselContainer');
+    const dots = document.querySelectorAll('.dot');
+    let currentIndex = 0;
+    const totalSlides = 5;
+
+    function updateCarousel() {
+      container.style.transform = `translateX(-${currentIndex * 100}%)`;
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('active', idx === currentIndex);
+      });
+    }
+
+    function nextSlide() {
+      currentIndex = (currentIndex + 1) % totalSlides;
+      updateCarousel();
+    }
+
+    // Auto-scroll every 2 seconds
+    let interval = setInterval(nextSlide, 2000);
+
+    // Dot navigation
+    dots.forEach(dot => {
+      dot.addEventListener('click', () => {
+        clearInterval(interval);
+        currentIndex = parseInt(dot.dataset.index);
+        updateCarousel();
+        interval = setInterval(nextSlide, 2000);
+      });
+    });
+  </script>
+  <!-- ===== CUSTOM POPUP ===== -->
+  <div id="customPopup">
+    <div class="icon">✓</div>
+    <div class="msg">Message here</div>
+  </div>
 </body>
 
 </html>

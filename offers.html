@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Special Offers | QRIFY</title>
+    <style>
+        :root {
+            --bg: #f7f7f5;
+            --primary: #1f2937;
+            --secondary: #d97706;
+            --accent: #c9184a;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: Inter, system-ui, sans-serif;
+            background: var(--bg);
+            overflow: hidden;
+        }
+
+        .offers-page {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .back-nav {
+            padding: 15px 20px;
+            background: white;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 100;
+        }
+
+        .back-nav a {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .carousel-view {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .carousel-container {
+            display: flex;
+            height: 100%;
+            transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .slide {
+            min-width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .offer-card {
+            width: 100%;
+            max-width: 1000px;
+            height: 85%;
+            border-radius: 40px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            padding: 0 60px;
+            color: white;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .offer-content h2 {
+            font-size: 3rem;
+            margin: 0;
+            font-style: italic;
+            opacity: 0.9;
+            text-transform: uppercase;
+        }
+
+        .offer-content h3 {
+            font-size: 6rem;
+            margin: 5px 0;
+            font-weight: 900;
+            line-height: 1;
+            text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .offer-content p {
+            font-size: 24px;
+            margin: 20px 0;
+            font-weight: 500;
+        }
+
+        .order-btn {
+            background: white;
+            color: black;
+            border: none;
+            padding: 18px 45px;
+            border-radius: 999px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .order-btn:hover {
+            background: #eee;
+            transform: translateY(-3px);
+        }
+
+        .image-side {
+            position: absolute;
+            right: 60px;
+            display: flex;
+            gap: -60px;
+            align-items: center;
+        }
+
+        .food-img {
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            border: 10px solid white;
+            object-fit: cover;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            background: white;
+        }
+
+        .food-img:nth-child(2) {
+            margin-left: -120px;
+            transform: scale(0.85) rotate(-10deg);
+            z-index: 1;
+        }
+
+        .dots {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 50;
+        }
+
+        .dot {
+            width: 14px;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .dot.active {
+            width: 45px;
+            border-radius: 10px;
+            background: white;
+        }
+
+        @media (max-width: 1024px) {
+            .food-img {
+                width: 250px;
+                height: 250px;
+            }
+
+            .offer-content h3 {
+                font-size: 4rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .slide {
+                padding: 0;
+            }
+
+            .offer-card {
+                border-radius: 0;
+                height: 100%;
+                padding: 0 30px;
+                flex-direction: column;
+                justify-content: center;
+                text-align: center;
+            }
+
+            .image-side {
+                position: relative;
+                right: auto;
+                margin-top: 40px;
+                margin-bottom: 60px;
+            }
+
+            .food-img {
+                width: 180px;
+                height: 180px;
+                border-width: 5px;
+            }
+
+            .food-img:nth-child(2) {
+                margin-left: -60px;
+            }
+
+            .offer-content h2 {
+                font-size: 2rem;
+            }
+
+            .offer-content h3 {
+                font-size: 4rem;
+            }
+
+            .offer-content p {
+                font-size: 1.2rem;
+            }
+
+            .dots {
+                bottom: 20px;
+            }
+
+            .dot {
+                width: 10px;
+                height: 10px;
+            }
+
+            .dot.active {
+                width: 30px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="offers-page">
+        <nav class="back-nav">
+            <a href="home.html">&larr; Back</a>
+            <span style="font-weight: 800; color: var(--secondary)">EXCLUSIVE DEALS</span>
+        </nav>
+
+        <div class="carousel-view">
+            <div class="carousel-container" id="container">
+                <!-- Slide 1 -->
+                <div class="slide">
+                    <div class="offer-card"
+                        style="background: radial-gradient(circle at center, #ff4d6d 0%, #c9184a 100%);">
+                        <div class="offer-content">
+                            <h2>FLAT</h2>
+                            <h3>50% OFF</h3>
+                            <p>with FREE delivery on all orders</p>
+                            <button class="order-btn" onclick="location.href='home.html'">ORDER NOW</button>
+                        </div>
+                        <div class="image-side">
+                            <img src="images/panner_butter_masala.jpg" class="food-img">
+                            <img src="images/Chicken_Biryani.webp" class="food-img">
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="slide">
+                    <div class="offer-card"
+                        style="background: radial-gradient(circle at center, #4361ee 0%, #3f37c9 100%);">
+                        <div class="offer-content">
+                            <h2>COMBO</h2>
+                            <h3>SAVE 30%</h3>
+                            <p>Special Weekend Family Deals</p>
+                            <button class="order-btn" onclick="location.href='home.html'">VIEW MENU</button>
+                        </div>
+                        <div class="image-side">
+                            <img src="images/Veg-Fried-Rice.webp" class="food-img">
+                            <img src="images/Chicken-Manchurian.jpg" class="food-img">
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 3 -->
+                <div class="slide">
+                    <div class="offer-card"
+                        style="background: radial-gradient(circle at center, #2b9348 0%, #007f5f 100%);">
+                        <div class="offer-content">
+                            <h2>FRESH</h2>
+                            <h3>BUY 1 GET 1</h3>
+                            <p>On all Veg Main Course Items</p>
+                            <button class="order-btn" onclick="location.href='home.html'">ORDER NOW</button>
+                        </div>
+                        <div class="image-side">
+                            <img src="images/dal_tadka.jpg" class="food-img">
+                            <img src="images/veg_handi.jpg" class="food-img">
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 4 -->
+                <div class="slide">
+                    <div class="offer-card"
+                        style="background: radial-gradient(circle at center, #fb8500 0%, #ffb703 100%);">
+                        <div class="offer-content">
+                            <h2>DESI</h2>
+                            <h3>UP TO 40%</h3>
+                            <p>Authentic North Indian Specials</p>
+                            <button class="order-btn" onclick="location.href='home.html'">EXPLORE</button>
+                        </div>
+                        <div class="image-side">
+                            <img src="images/Chicken_Curry.webp" class="food-img">
+                            <img src="images/Mutton_Biryani.webp" class="food-img">
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 5 -->
+                <div class="slide">
+                    <div class="offer-card"
+                        style="background: radial-gradient(circle at center, #7209b7 0%, #560bad 100%);">
+                        <div class="offer-content">
+                            <h2>SNACKS</h2>
+                            <h3>FLAT ₹100 OFF</h3>
+                            <p>On Orders above ₹400 Today</p>
+                            <button class="order-btn" onclick="location.href='home.html'">ORDER NOW</button>
+                        </div>
+                        <div class="image-side">
+                            <img src="images/Chicken_Lollipop.webp" class="food-img">
+                            <img src="images/Fish_Fry.webp" class="food-img">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="dots" id="dots">
+                <div class="dot active" data-idx="0"></div>
+                <div class="dot" data-idx="1"></div>
+                <div class="dot" data-idx="2"></div>
+                <div class="dot" data-idx="3"></div>
+                <div class="dot" data-idx="4"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const container = document.getElementById('container');
+        const dots = document.querySelectorAll('.dot');
+        let index = 0;
+        const total = 5;
+
+        function update() {
+            container.style.transform = `translateX(-${index * 100}%)`;
+            dots.forEach((d, i) => d.classList.toggle('active', i === index));
+        }
+
+        let itv = setInterval(() => {
+            index = (index + 1) % total;
+            update();
+        }, 2000);
+
+        dots.forEach(dot => {
+            dot.onclick = () => {
+                clearInterval(itv);
+                index = parseInt(dot.dataset.idx);
+                update();
+                itv = setInterval(() => {
+                    index = (index + 1) % total;
+                    update();
+                }, 2000);
+            };
+        });
+    </script>
+</body>
+
+</html>

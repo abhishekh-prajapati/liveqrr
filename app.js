@@ -1,22 +1,41 @@
 
-//index.html javascript
 let currentLang = "en";
 let activeCategory = "veg";
 let menuData = {};
 let cart = {};
 
-
 /* LOAD MENU JSON */
 async function loadMenuJSON(lang) {
-  const res = await fetch(`./menu/menu-${lang}.json`);
-  menuData = await res.json();
-  renderCategories();
-  renderMenu(activeCategory);
+  try {
+    const res = await fetch(`./menu/menu-${lang}.json`);
+    if (!res.ok) throw new Error("Failed to load menu");
+    menuData = await res.json();
+
+    // Sync UI elements
+    currentLang = lang;
+    updateLanguageUI(lang);
+
+    renderCategories();
+    renderMenu(activeCategory);
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+function updateLanguageUI(lang) {
+  // Update buttons
+  document.querySelectorAll(".lang-switch button").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.lang === lang);
+  });
+  // Update dropdown
+  const dropdown = document.getElementById("langDropdown");
+  if (dropdown) dropdown.value = lang;
 }
 
 /* RENDER CATEGORIES */
 function renderCategories() {
   const box = document.querySelector(".categories");
+  if (!box) return;
   box.innerHTML = "";
 
   Object.keys(menuData).forEach(cat => {
@@ -26,36 +45,38 @@ function renderCategories() {
 
     span.onclick = () => {
       activeCategory = cat;
-
-      document.querySelectorAll(".categories span")
-        .forEach(s => s.classList.remove("active"));
-      span.classList.add("active");
-
       renderMenu(cat);
+      setActiveCategoryUI(cat);
 
-      // smooth scroll to menu
-      document.getElementById("menu")
-        .scrollIntoView({ behavior: "smooth", block: "start" });
+      const menuEl = document.getElementById("menu");
+      if (menuEl) menuEl.scrollIntoView({ behavior: "smooth", block: "start" });
     };
 
-
     box.appendChild(span);
+  });
+}
+
+function setActiveCategoryUI(cat) {
+  document.querySelectorAll(".categories span").forEach(span => {
+    const text = span.textContent.replace(" ", "").toLowerCase();
+    span.classList.toggle("active", text === cat.toLowerCase());
   });
 }
 
 /* RENDER MENU (ZOMATO STYLE) */
 function renderMenu(cat) {
   const box = document.getElementById("menu");
-  box.innerHTML = `<div class="menu-section" data-cat="${cat}"></div>`;
+  if (!box) return;
+
+  let html = `<div class="menu-section" data-cat="${cat}"></div>`;
 
   menuData[cat].forEach((item, i) => {
     const qty = cart[item.name]?.qty || 0;
 
-    // Toggle veg/non-veg styling (simple logic)
     let isVeg = item.veg;
     if (item.veg === undefined) {
-      // Infer from category/name if missing
-      isVeg = ["veg", "south", "snacks", "chinese"].includes(cat) && !item.name.toLowerCase().includes("chicken") && !item.name.toLowerCase().includes("egg") && !item.name.toLowerCase().includes("mutton") && !item.name.toLowerCase().includes("fish") && !item.name.toLowerCase().includes("prawn");
+      isVeg = ["veg", "south", "snacks", "chinese"].includes(cat) &&
+        !item.name.toLowerCase().match(/chicken|egg|mutton|fish|prawn/);
     }
 
     const dietIcon = isVeg
@@ -65,8 +86,8 @@ function renderMenu(cat) {
     const rating = item.rating || (Math.random() * (4.8 - 3.9) + 3.9).toFixed(1);
     const votes = Math.floor(Math.random() * 900) + 50;
 
-    box.innerHTML += `
-      <div class="menu-item-z">
+    html += `
+      <div class="menu-item-z" id="item-${cat}-${i}">
         <div class="menu-left">
           <div class="menu-meta">
             ${dietIcon}
@@ -84,7 +105,6 @@ function renderMenu(cat) {
         <div class="menu-right">
           <div class="img-wrapper">
              <img src="./images/${item.img}" onerror="this.src='./images/food-placeholder.jpg'">
-             
              <div class="add-action-area">
                 ${qty === 0
         ? `<button class="add-btn-z" onclick="updateCart('${cat}',${i},1)">ADD</button>`
@@ -101,6 +121,7 @@ function renderMenu(cat) {
       <div class="divider-dashed"></div>
     `;
   });
+  box.innerHTML = html;
 }
 
 /* CART LOGIC */
@@ -118,6 +139,8 @@ function updateCart(cat, i, change) {
 function renderCart() {
   const bar = document.getElementById("cartBar");
   const list = document.getElementById("cartItems");
+  if (!bar || !list) return;
+
   let total = 0;
   list.innerHTML = "";
 
@@ -126,33 +149,51 @@ function renderCart() {
     list.innerHTML += `${name} × ${cart[name].qty}<br>`;
   });
 
-  document.getElementById("cartTotal").innerText = "₹" + total;
+  const totalEl = document.getElementById("cartTotal");
+  if (totalEl) totalEl.innerText = "₹" + total;
   bar.style.display = total > 0 ? "block" : "none";
 }
 
+/* REDIRECT TO PAYMENT */
 function placeOrder() {
-  alert("Order placed successfully!");
+  if (Object.keys(cart).length === 0) {
+    showPopup("Cart is empty", "⚠️");
+    return;
+  }
+  sessionStorage.setItem("qrify_cart", JSON.stringify(cart));
+  window.location.href = "payment.html";
 }
 
-/* LANGUAGE SWITCH */
+/* CUSTOM POPUP LOGIC */
+function showPopup(msg, icon = "✓") {
+  const popup = document.getElementById("customPopup");
+  if (!popup) return;
+
+  popup.querySelector(".msg").textContent = msg;
+  popup.querySelector(".icon").textContent = icon;
+
+  popup.classList.add("show");
+  setTimeout(() => {
+    popup.classList.remove("show");
+  }, 3000);
+}
+
+/* LANGUAGE SWITCH EVENT LISTENERS */
 document.querySelectorAll(".lang-switch button").forEach(btn => {
-  btn.onclick = () => {
-    currentLang = btn.dataset.lang;
-    document.querySelectorAll(".lang-switch button")
-      .forEach(b => b.classList.remove("active"));
-    btn.classList.add("active");
-    loadMenuJSON(currentLang);
-  };
+  btn.onclick = () => loadMenuJSON(btn.dataset.lang);
 });
+
+const langDropdown = document.getElementById("langDropdown");
+if (langDropdown) {
+  langDropdown.addEventListener("change", () => loadMenuJSON(langDropdown.value));
+}
 
 function formatCategory(cat) {
   if (cat === "nonveg") return "Non Veg";
   return cat.charAt(0).toUpperCase() + cat.slice(1);
 }
 
-/* DEFAULT LOAD */
-loadMenuJSON("en");
-
+/* SCROLL SPY */
 window.addEventListener("scroll", () => {
   const sections = document.querySelectorAll(".menu-section");
   let current = activeCategory;
@@ -163,119 +204,65 @@ window.addEventListener("scroll", () => {
       current = sec.dataset.cat;
     }
   });
-
-  document.querySelectorAll(".categories span").forEach(span => {
-    span.classList.toggle(
-      "active",
-      span.textContent.replace(" ", "").toLowerCase() === current
-    );
-  });
+  setActiveCategoryUI(current);
 });
-// search
 
-function setActiveCategory(cat) {
-  activeCategory = cat;
-
-  document.querySelectorAll(".categories span").forEach(span => {
-    span.classList.toggle(
-      "active",
-      span.textContent.replace(" ", "").toLowerCase() === cat
-    );
-  });
-}
-
-
-
+/* SEARCH LOGIC */
 const searchInput = document.getElementById("searchInput");
 const suggestionsBox = document.getElementById("searchSuggestions");
 
-searchInput.addEventListener("input", () => {
-  const query = searchInput.value.toLowerCase().trim();
-  suggestionsBox.innerHTML = "";
+if (searchInput && suggestionsBox) {
+  searchInput.addEventListener("input", () => {
+    const query = searchInput.value.toLowerCase().trim();
+    suggestionsBox.innerHTML = "";
 
-  if (!query) {
-    suggestionsBox.style.display = "none";
-    return;
-  }
-
-  let results = [];
-
-  Object.keys(menuData).forEach(category => {
-    menuData[category].forEach(item => {
-      if (item.name.toLowerCase().includes(query)) {
-        results.push({
-          name: item.name,
-          category
-        });
-      }
-    });
-  });
-
-  if (results.length === 0) {
-    suggestionsBox.style.display = "none";
-    return;
-  }
-
-  results.forEach(result => {
-    const div = document.createElement("div");
-    div.textContent = result.name;
-
-    div.onclick = () => {
+    if (!query) {
       suggestionsBox.style.display = "none";
-      searchInput.value = "";
+      return;
+    }
 
-      // 1️⃣ Switch category
-      setActiveCategory(result.category);
+    let results = [];
+    Object.keys(menuData).forEach(category => {
+      menuData[category].forEach(item => {
+        if (item.name.toLowerCase().includes(query)) {
+          results.push({ name: item.name, category });
+        }
+      });
+    });
 
-      // 2️⃣ Render that category
-      renderMenu(result.category);
+    if (results.length === 0) {
+      suggestionsBox.style.display = "none";
+      return;
+    }
 
-      // 3️⃣ Scroll after DOM updates
-      setTimeout(() => {
-        const titleElements = document.querySelectorAll(".menu-title");
-        let target = null;
-        // Find element by text content
-        for (const t of titleElements) {
-          if (t.textContent === result.name) {
-            target = t.closest(".menu-item-z");
-            break;
+    results.forEach(result => {
+      const div = document.createElement("div");
+      div.textContent = result.name;
+      div.onclick = () => {
+        suggestionsBox.style.display = "none";
+        searchInput.value = "";
+        activeCategory = result.category;
+        renderMenu(result.category);
+        setActiveCategoryUI(result.category);
+
+        setTimeout(() => {
+          const titleElements = document.querySelectorAll(".menu-title");
+          for (const t of titleElements) {
+            if (t.textContent === result.name) {
+              const target = t.closest(".menu-item-z");
+              target.scrollIntoView({ behavior: "smooth", block: "center" });
+              target.style.background = "#fffbeb";
+              setTimeout(() => target.style.background = "white", 1200);
+              break;
+            }
           }
-        }
-
-        if (target) {
-          target.scrollIntoView({ behavior: "smooth", block: "center" });
-          target.style.background = "#fffbeb";
-          setTimeout(() => target.style.background = "white", 1200);
-        }
-      }, 100);
-    };
-
-    suggestionsBox.appendChild(div);
+        }, 100);
+      };
+      suggestionsBox.appendChild(div);
+    });
+    suggestionsBox.style.display = "block";
   });
-
-  suggestionsBox.style.display = "block";
-});
-
-//dropdown of the lang
-const langDropdown = document.getElementById("langDropdown");
-
-langDropdown.addEventListener("change", () => {
-  currentLang = langDropdown.value;
-  loadMenuJSON(currentLang);
-
-  // sync button state (for resize back to desktop)
-  document.querySelectorAll(".lang-switch button").forEach(btn => {
-    btn.classList.toggle("active", btn.dataset.lang === currentLang);
-  });
-});
-
-
-//redirect to payment
-function placeOrder() {
-  if (Object.keys(cart).length === 0) {
-    alert("Cart is empty");
-    return;
-  }
-  sessionStorage.setItem("qrify_cart", JSON.stringify(cart));
-  window.location.href = "payment.html";
 }
+
+/* INITIAL LOAD */
+loadMenuJSON("en");
